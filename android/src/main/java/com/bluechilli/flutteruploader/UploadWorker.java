@@ -4,21 +4,12 @@ import android.content.Context;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.webkit.URLUtil;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.concurrent.futures.CallbackToFutureAdapter;
-import androidx.work.Data;
-import androidx.work.ListenableWorker;
-import androidx.work.WorkerParameters;
+
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.reflect.TypeToken;
-import io.flutter.FlutterInjector;
-import io.flutter.embedding.engine.FlutterEngine;
-import io.flutter.embedding.engine.dart.DartExecutor;
-import io.flutter.embedding.engine.loader.FlutterLoader;
-import io.flutter.view.FlutterCallbackInformation;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,6 +22,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.concurrent.futures.CallbackToFutureAdapter;
+import androidx.work.Data;
+import androidx.work.ListenableWorker;
+import androidx.work.WorkerParameters;
+import io.flutter.FlutterInjector;
+import io.flutter.embedding.engine.FlutterEngine;
+import io.flutter.embedding.engine.dart.DartExecutor;
+import io.flutter.embedding.engine.loader.FlutterLoader;
+import io.flutter.view.FlutterCallbackInformation;
 import okhttp3.Call;
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -239,14 +242,12 @@ public class UploadWorker extends ListenableWorker implements CountProgressListe
               .writeTimeout((long) timeout, TimeUnit.SECONDS)
               .readTimeout((long) timeout, TimeUnit.SECONDS)
               .build();
-      client.networkInterceptors().add(new Interceptor() {
-        @Override public Response intercept(Chain chain) throws IOException {
-          Request request = chain.request()
-                  .newBuilder()
-                  .removeHeader("Content-Type")
-                  .build();
-          return chain.proceed(request);
-        }
+      client.networkInterceptors().add(chain -> {
+        Request request1 = chain.request()
+                                .newBuilder()
+                                .removeHeader("Content-Type")
+                                .build();
+        return chain.proceed(request1);
       });
       call = client.newCall(request);
       Response response = call.execute();
