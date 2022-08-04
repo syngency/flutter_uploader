@@ -160,7 +160,7 @@ public class UploadWorker extends ListenableWorker implements CountProgressListe
 
         String mimeType = GetMimeType(item.getPath());
         MediaType contentType = MediaType.parse(mimeType);
-        innerRequestBody = RequestBody.create(file, contentType);
+        innerRequestBody = RequestBody.create(file, "");
       } else {
         MultipartBody.Builder formRequestBuilder = prepareRequest(parameters, null);
         int fileExistsCount = 0;
