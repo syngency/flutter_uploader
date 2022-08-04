@@ -239,7 +239,15 @@ public class UploadWorker extends ListenableWorker implements CountProgressListe
               .writeTimeout((long) timeout, TimeUnit.SECONDS)
               .readTimeout((long) timeout, TimeUnit.SECONDS)
               .build();
-
+      client.networkInterceptors().add(new Interceptor() {
+        @Override public Response intercept(Chain chain) throws IOException {
+          Request request = chain.request()
+                  .newBuilder()
+                  .removeHeader("Content-Type")
+                  .build();
+          return chain.proceed(request);
+        }
+      });
       call = client.newCall(request);
       Response response = call.execute();
       statusCode = response.code();
