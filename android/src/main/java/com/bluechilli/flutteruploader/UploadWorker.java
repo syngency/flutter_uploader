@@ -196,7 +196,7 @@ public class UploadWorker extends ListenableWorker implements CountProgressListe
       Request.Builder requestBuilder = new Request.Builder();
 
       requestBuilder.addHeader("Accept", "*/*");
-      requestBuilder.removeHeader("Content-Type", "application/octet-stream");
+      requestBuilder.removeHeader("Content-Type");
 
       if (headers != null) {
         for (String key : headers.keySet()) {
