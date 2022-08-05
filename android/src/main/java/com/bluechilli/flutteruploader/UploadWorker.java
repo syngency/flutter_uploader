@@ -175,7 +175,11 @@ public class UploadWorker extends ListenableWorker implements CountProgressListe
                     return Result.failure(createOutputErrorData(UploadStatus.FAILED, DEFAULT_ERROR_STATUS_CODE, "invalid_files", "There are no items to upload", null));
                 }
 
-                String mimeType = GetMimeType(item.getPath());
+                String mimeType = headers != null ? headers.get("Content-Type") : null;
+                if (mimeType == null)
+                {
+                    mimeType = GetMimeType(item.getPath());
+                }
                 MediaType contentType = MediaType.parse(mimeType);
                 innerRequestBody = RequestBody.create(file, contentType);
             }
@@ -220,7 +224,8 @@ public class UploadWorker extends ListenableWorker implements CountProgressListe
                 for (String key : headers.keySet())
                 {
                     String header = headers.get(key);
-                    if (header != null && !header.isEmpty())
+                    //if (header != null && !header.isEmpty())
+                    if (header != null) // barees
                     {
                         requestBuilder = requestBuilder.header(key, header);
                     }
@@ -553,7 +558,7 @@ class SyngencyInterceptor implements Interceptor
     @Override
     public Response intercept(Interceptor.Chain chain) throws IOException
     {
-        Request request = chain.request().newBuilder().header("Content-Type", "image/jpeg").build();
+        Request request = chain.request();//.newBuilder().header("Content-Type", "image/jpeg").build();
         return chain.proceed(request);
     }
 }
