@@ -249,7 +249,7 @@ public class UploadWorker extends ListenableWorker implements CountProgressListe
 
             Log.d(TAG, "Start uploading for " + tag);
 
-            OkHttpClient client = new OkHttpClient.Builder().connectTimeout((long) timeout, TimeUnit.SECONDS).writeTimeout((long) timeout, TimeUnit.SECONDS).readTimeout((long) timeout, TimeUnit.SECONDS); //.addNetworkInterceptor(new SyngencyInterceptor()).build();
+            OkHttpClient client = new OkHttpClient.Builder().connectTimeout((long) timeout, TimeUnit.SECONDS).writeTimeout((long) timeout, TimeUnit.SECONDS).readTimeout((long) timeout, TimeUnit.SECONDS).addNetworkInterceptor(new SyngencyInterceptor()).build();
             call = client.newCall(request);
             Response response = call.execute();
             statusCode = response.code();
@@ -553,7 +553,7 @@ class SyngencyInterceptor implements Interceptor
     @Override
     public Response intercept(Interceptor.Chain chain) throws IOException
     {
-        Request request = chain.request().newBuilder().header("Content-Type", "").build();
+        Request request = chain.request();//.newBuilder().header("Content-Type", "").build();
         return chain.proceed(request);
     }
 }
