@@ -214,7 +214,6 @@ public class UploadWorker extends ListenableWorker implements CountProgressListe
             Request.Builder requestBuilder = new Request.Builder();
 
             requestBuilder.addHeader("Accept", "*/*");
-            requestBuilder.removeHeader("Content-Type");
 
             if (headers != null)
             {
@@ -554,7 +553,7 @@ class SyngencyInterceptor implements Interceptor
     @Override
     public Response intercept(Interceptor.Chain chain) throws IOException
     {
-        Request request = chain.request().newBuilder().removeHeader("Accept-Encoding").header("Content-Type", "").build();
+        Request request = chain.request().newBuilder().header("Content-Type", "").build();
         return chain.proceed(request);
     }
 }
