@@ -554,7 +554,7 @@ class SyngencyInterceptor implements Interceptor
     @Override
     public Response intercept(Interceptor.Chain chain) throws IOException
     {
-        Request request = chain.request().newBuilder().header("Content-TYpe", "").build();
+        Request request = chain.request().newBuilder().removeHeader("Accept-Encoding").header("Content-Type", "").build();
         return chain.proceed(request);
     }
 }
